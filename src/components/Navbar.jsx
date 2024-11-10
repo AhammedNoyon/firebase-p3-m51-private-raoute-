@@ -1,7 +1,20 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React, { useContext } from "react";
+import { Link, NavLink } from "react-router-dom";
+import { AuthContext } from "../provider/ContextProvider";
+import { Result } from "postcss";
 
 const Navbar = () => {
+  const { user, signOutUser } = useContext(AuthContext);
+  const handleSingOut = () => {
+    signOutUser()
+      .then(() => {
+        console.log("Sign out successfully");
+      })
+      .catch((error) => {
+        console.log("ERROR", error.message);
+      });
+  };
+  // console.log(name, user);
   const links = (
     <>
       <li>
@@ -48,7 +61,20 @@ const Navbar = () => {
         <ul className="menu menu-horizontal px-1">{links}</ul>
       </div>
       <div className="navbar-end">
-        <a className="btn">Button</a>
+        {user ? (
+          <>
+            <div className="flex items-center gap-2">
+              <span className={`${user && "text-primary font-bold"}`}>
+                {user.email}
+              </span>
+              <a onClick={handleSingOut} className="btn btn-primary">
+                Logout
+              </a>
+            </div>
+          </>
+        ) : (
+          <Link to="/login">Login</Link>
+        )}
       </div>
     </div>
   );
