@@ -11,40 +11,48 @@ export const AuthContext = createContext(null);
 const ContextProvider = ({ children }) => {
   //state
   const [user, setUser] = useState(null);
+  const [reload, setReload] = useState(true);
 
   //create
   const userCreate = (email, password) => {
+    setReload(true);
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
   //collect logged
   const loginUser = (email, password) => {
+    setReload(true);
     return signInWithEmailAndPassword(auth, email, password);
   };
 
-  //sign out
-  const signOutUser = () => {
+  // //sign out
+  // const signOutUser = () => {
+  //   return signOut(auth);
+  // };
+
+  const userSignOut = () => {
+    setReload(true);
     return signOut(auth);
   };
 
   //save logged user
   useEffect(() => {
     const savedUser = onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) {
-        setUser(currentUser);
-      } else {
-        return () => {
-          savedUser();
-        };
-      }
+      console.log("that is current user", currentUser);
+      setUser(currentUser);
+      setReload(false);
     });
+    return () => {
+      savedUser();
+    };
   }, []);
 
   const authInfo = {
     user,
+    reload,
     userCreate,
     loginUser,
-    signOutUser,
+    userSignOut,
   };
   return (
     <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>

@@ -1,10 +1,11 @@
 import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../provider/ContextProvider";
 import js from "@eslint/js";
 
 const Login = () => {
   const { loginUser } = useContext(AuthContext);
+  const navigate = useNavigate();
   const handleLogin = (event) => {
     event.preventDefault();
     const name = event.target.name.value;
@@ -16,6 +17,8 @@ const Login = () => {
     loginUser(email, password)
       .then((result) => {
         console.log(result.user);
+        event.target.reset();
+        navigate("/profile");
       })
       .catch((error) => {
         console.log("ERROR", error.message);

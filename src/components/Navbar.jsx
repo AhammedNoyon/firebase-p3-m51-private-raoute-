@@ -1,14 +1,25 @@
 import React, { useContext } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { AuthContext } from "../provider/ContextProvider";
-import { Result } from "postcss";
+// import { Result } from "postcss";
 
 const Navbar = () => {
-  const { user, signOutUser } = useContext(AuthContext);
+  const { user, userSignOut } = useContext(AuthContext);
+  const navigate = useNavigate();
+
   const handleSingOut = () => {
-    signOutUser()
+    // signOutUser()
+    //   .then(() => {
+    //     console.log("Sign out successfully");
+    //   })
+    //   .catch((error) => {
+    //     console.log("ERROR", error.message);
+    //   });
+
+    userSignOut()
       .then(() => {
-        console.log("Sign out successfully");
+        console.log("log out successfully");
+        navigate("/login");
       })
       .catch((error) => {
         console.log("ERROR", error.message);
@@ -26,6 +37,16 @@ const Navbar = () => {
       <li>
         <NavLink to="/sign">Sign Up</NavLink>
       </li>
+      {user && (
+        <>
+          <li>
+            <NavLink to="/profile">Profile</NavLink>
+          </li>
+          <li>
+            <NavLink to="/orders">Orders</NavLink>
+          </li>
+        </>
+      )}
     </>
   );
   return (
