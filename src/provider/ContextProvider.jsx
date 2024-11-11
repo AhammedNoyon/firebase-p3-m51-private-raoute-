@@ -2,9 +2,13 @@ import { createUserWithEmailAndPassword } from "firebase/auth/cordova";
 import { createContext, useEffect, useState } from "react";
 import auth from "../firebase/firebase.init";
 import {
+  GithubAuthProvider,
+  GoogleAuthProvider,
   onAuthStateChanged,
   signInWithEmailAndPassword,
+  signInWithPopup,
   signOut,
+  TwitterAuthProvider,
 } from "firebase/auth";
 
 export const AuthContext = createContext(null);
@@ -12,6 +16,9 @@ const ContextProvider = ({ children }) => {
   //state
   const [user, setUser] = useState(null);
   const [reload, setReload] = useState(true);
+  const provider = new GoogleAuthProvider();
+  const githubProvider = new GithubAuthProvider();
+  const twitterProvider = new TwitterAuthProvider();
 
   //create
   const userCreate = (email, password) => {
@@ -47,12 +54,25 @@ const ContextProvider = ({ children }) => {
     };
   }, []);
 
+  const signInWithGoogle = () => {
+    return signInWithPopup(auth, provider);
+  };
+  const signWithGitHub = () => {
+    return signInWithPopup(auth, githubProvider);
+  };
+  const signWithTwitter = () => {
+    return signInWithPopup(auth, twitterProvider);
+  };
+
   const authInfo = {
     user,
     reload,
     userCreate,
     loginUser,
     userSignOut,
+    signInWithGoogle,
+    signWithGitHub,
+    signWithTwitter,
   };
   return (
     <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>

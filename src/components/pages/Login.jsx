@@ -4,7 +4,8 @@ import { AuthContext } from "../../provider/ContextProvider";
 import js from "@eslint/js";
 
 const Login = () => {
-  const { loginUser } = useContext(AuthContext);
+  const { loginUser, signInWithGoogle, signWithGitHub, signWithTwitter } =
+    useContext(AuthContext);
   const navigate = useNavigate();
   const handleLogin = (event) => {
     event.preventDefault();
@@ -19,6 +20,39 @@ const Login = () => {
         console.log(result.user);
         event.target.reset();
         navigate("/profile");
+      })
+      .catch((error) => {
+        console.log("ERROR", error.message);
+      });
+  };
+
+  const handleSignInWithGoogle = () => {
+    signInWithGoogle()
+      .then((result) => {
+        console.log(result.user);
+        navigate("/");
+      })
+      .catch((error) => {
+        console.log("ERROR", error.message);
+      });
+  };
+
+  const handleSignInWithGithub = () => {
+    signWithGitHub()
+      .then((result) => {
+        console.log(result.user);
+        navigate("/");
+      })
+      .catch((error) => {
+        console.log("ERROR", error.message);
+      });
+  };
+
+  const handleSignInWithTwitter = () => {
+    signWithTwitter()
+      .then((result) => {
+        console.log(result.user);
+        navigate("/");
       })
       .catch((error) => {
         console.log("ERROR", error.message);
@@ -83,6 +117,26 @@ const Login = () => {
                 Sing up
               </Link>
             </h3>
+          </div>
+          <div>
+            <div
+              onClick={handleSignInWithGoogle}
+              className="btn w-full bg-slate-400 text-primary font-bold"
+            >
+              Login with Google
+            </div>
+            <div
+              onClick={handleSignInWithGithub}
+              className="btn w-full bg-slate-400 text-primary font-bold"
+            >
+              Login With Github
+            </div>
+            <div
+              onClick={handleSignInWithTwitter}
+              className="btn w-full bg-slate-400 text-primary font-bold"
+            >
+              Login With Twitter
+            </div>
           </div>
         </form>
       </div>
